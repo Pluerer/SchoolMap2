@@ -1,0 +1,403 @@
+
+/* GENERAL SETTINGS */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #eef2f7;
+    color: #172033;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* WELCOME SCREEN */
+.welcome-screen {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    background:
+        linear-gradient(135deg, rgba(7, 20, 48, 0.96), rgba(15, 67, 105, 0.88));
+    color: white;
+    text-align: center;
+}
+
+.welcome-content {
+    width: 100%;
+    max-width: 720px;
+    padding: 45px 25px;
+}
+
+.school-icon {
+    font-size: 70px;
+    margin-bottom: 20px;
+}
+
+.welcome-small {
+    color: #9bd6ff;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-bottom: 15px;
+}
+
+.welcome-content h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    line-height: 1.2;
+    margin-bottom: 18px;
+}
+
+.welcome-description {
+    color: #d7e7f5;
+    font-size: 17px;
+    margin-bottom: 32px;
+}
+
+/* BUTTONS */
+.primary-button,
+.secondary-button {
+    border: none;
+    border-radius: 10px;
+    padding: 13px 18px;
+    font-weight: bold;
+    transition: 0.2s ease;
+}
+
+.primary-button {
+    color: white;
+    background: #1478d4;
+}
+
+.primary-button:hover {
+    background: #0863b8;
+    transform: translateY(-1px);
+}
+
+.secondary-button {
+    color: #19324e;
+    background: #e5edf5;
+}
+
+.secondary-button:hover {
+    background: #d1dfec;
+}
+
+.full {
+    width: 100%;
+}
+
+/* IMPORTANT: HIDE THE DASHBOARD UNTIL OPENED */
+.hidden {
+    display: none !important;
+}
+
+/* MAIN DASHBOARD */
+.main-app {
+    min-height: 100vh;
+}
+
+.topbar {
+    min-height: 78px;
+    padding: 15px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background: #102844;
+    color: white;
+}
+
+.topbar h2 {
+    font-size: 23px;
+    margin-bottom: 4px;
+}
+
+.topbar p {
+    color: #bfd0e1;
+    font-size: 13px;
+}
+
+/* DASHBOARD COLUMNS */
+.dashboard {
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1600px;
+    margin: auto;
+}
+
+/* SIDEBAR */
+.sidebar {
+    background: white;
+    border: 1px solid #dce4ed;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 5px 18px rgba(20, 40, 70, 0.05);
+    align-self: start;
+}
+
+.sidebar h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.muted {
+    color: #77869a;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.sidebar label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    margin: 16px 0 7px;
+}
+
+.sidebar input,
+.sidebar select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd7e3;
+    border-radius: 8px;
+    background: white;
+    color: #172033;
+    outline: none;
+}
+
+.sidebar input:focus,
+.sidebar select:focus {
+    border-color: #1478d4;
+    box-shadow: 0 0 0 3px rgba(20, 120, 212, 0.12);
+}
+
+#setLocationButton {
+    margin-top: 18px;
+}
+
+.status-message {
+    background: #edf5ff;
+    color: #28547c;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.divider {
+    height: 1px;
+    background: #e4eaf0;
+    margin: 22px 0;
+}
+
+.sidebar h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.building-info {
+    background: #f5f8fb;
+    border: 1px solid #e5ebf1;
+    border-radius: 9px;
+    padding: 14px;
+    min-height: 95px;
+    margin-bottom: 15px;
+}
+
+.building-info h3 {
+    color: #155b9b;
+    margin-bottom: 7px;
+}
+
+.building-info p {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.legend {
+    margin-top: 24px;
+}
+
+.legend p {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #58677a;
+    font-size: 13px;
+    margin: 9px 0;
+}
+
+.legend-dot {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1px solid #aab7c5;
+}
+
+.legend-dot.blue {
+    background: #1685ff;
+}
+
+.legend-dot.green {
+    background: #00b978;
+}
+
+.legend-dot.white {
+    background: white;
+}
+
+/* MAP AREA */
+.map-section {
+    min-width: 0;
+    background: white;
+    border: 1px solid #dce4ed;
+    border-radius: 15px;
+    padding: 22px;
+    box-shadow: 0 5px 18px rgba(20, 40, 70, 0.05);
+}
+
+.map-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.map-heading h2 {
+    font-size: 23px;
+    margin-bottom: 5px;
+}
+
+.map-heading p {
+    color: #77869a;
+    font-size: 13px;
+}
+
+.map-badge {
+    background: #e8f5ff;
+    color: #1767a8;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.map-viewport {
+    width: 100%;
+    overflow: auto;
+    border: 1px solid #d7e3d9;
+    border-radius: 12px;
+    background: #edf4ee;
+}
+
+#schoolMap {
+    display: block;
+    width: 100%;
+    min-width: 600px;
+    height: auto;
+    cursor: crosshair;
+}
+
+/* BUILDINGS */
+.building {
+    fill: #ffffff;
+    stroke: #315a7d;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    cursor: pointer;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.building:hover {
+    fill: #d7edff;
+    stroke: #087bd1;
+    stroke-width: 5;
+}
+
+.building.selected {
+    fill: #ffe29a;
+    stroke: #e08a00;
+    stroke-width: 5;
+}
+
+.building-label {
+    fill: #17334d;
+    font-size: 19px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+    user-select: none;
+}
+
+.map-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #738196;
+    font-size: 12px;
+    margin-top: 14px;
+}
+
+/* SMALLER SCREENS */
+@media (max-width: 900px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        order: 2;
+    }
+
+    .map-section {
+        order: 1;
+    }
+}
+
+@media (max-width: 550px) {
+    .topbar {
+        padding: 14px;
+    }
+
+    .dashboard {
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .sidebar,
+    .map-section {
+        padding: 15px;
+    }
+
+    .map-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .map-footer {
+        flex-direction: column;
+    }
+
+    #schoolMap {
+        min-width: 550px;
+    }
+}

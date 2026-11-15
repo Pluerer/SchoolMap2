@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolMap | Dona Carmen National High School</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <!-- WELCOME SCREEN -->
+    <section id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <div class="school-icon">🏫</div>
+            <p class="welcome-small">WELCOME TO</p>
+            <h1>DONA CARMEN<br>NATIONAL HIGH SCHOOL</h1>
+            <p class="welcome-description">
+                Interactive School Navigation System
+            </p>
+            <button id="startButton" class="primary-button">
+                Open School Map →
+            </button>
+        </div>
+    </section>
+
+    <!-- MAIN WEBSITE -->
+    <main id="mainApp" class="main-app hidden">
+
+        <header class="topbar">
+            <div>
+                <h2>🏫 SchoolMap</h2>
+                <p>Dona Carmen National High School</p>
+            </div>
+            <button id="homeButton" class="secondary-button">Home</button>
+        </header>
+
+        <div class="dashboard">
+
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <h2>Navigation</h2>
+                <p class="muted">Find your destination</p>
+
+                <label for="searchInput">Search building</label>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search A, Gym, Canteen..."
+                >
+
+                <label for="destinationSelect">Choose destination</label>
+                <select id="destinationSelect">
+                    <option value="">Select a building</option>
+                </select>
+
+                <button id="setLocationButton" class="primary-button full">
+                    📍 Set My Location
+                </button>
+
+                <p id="statusMessage" class="status-message">
+                    Press Set My Location, then click an empty space on the map.
+                </p>
+
+                <div class="divider"></div>
+
+                <h3>Building Information</h3>
+                <div id="buildingInfo" class="building-info">
+                    <h3>No building selected</h3>
+                    <p>Choose a building on the map to see its information.</p>
+                </div>
+
+                <button id="clearButton" class="secondary-button full">
+                    Clear Navigation
+                </button>
+
+                <div class="legend">
+                    <h3>Map Legend</h3>
+                    <p><span class="legend-dot blue"></span> Your location</p>
+                    <p><span class="legend-dot green"></span> Navigation route</p>
+                    <p><span class="legend-dot white"></span> School buildings</p>
+                </div>
+            </aside>
+
+            <!-- MAP AREA -->
+            <section class="map-section">
+                <div class="map-heading">
+                    <div>
+                        <h2>School Map</h2>
+                        <p>Click a building to select your destination.</p>
+                    </div>
+                    <div class="map-badge">INTERACTIVE MAP</div>
+                </div>
+
+                <div class="map-viewport">
+                    <svg
+                        id="schoolMap"
+                        viewBox="0 0 822 568"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-label="Interactive school map"
+                    >
+                        <defs>
+                            <pattern id="groundPattern" width="28" height="28" patternUnits="userSpaceOnUse">
+                                <circle cx="3" cy="3" r="1" fill="#dce8df"/>
+                            </pattern>
+                        </defs>
+
+                        <rect x="0" y="0" width="822" height="568" fill="#edf4ee"/>
+                        <rect x="0" y="0" width="822" height="568" fill="url(#groundPattern)"/>
+
+                        <!-- Decorative open grounds -->
+                        <path d="M20 25 H800 V545 H20 Z"
+                              fill="none" stroke="#d2e2d5" stroke-width="5"
+                              stroke-dasharray="10 10"/>
+
+                        <!-- ROUTE AND LOCATION MARKERS -->
+                        <g id="routeLayer"></g>
+
+                        <!-- BUILDING A -->
+                        <polygon class="building" data-building="A"
+                            points="176,202 312,94 331,122 207,236"/>
+                        <text class="building-label" x="255" y="170">A</text>
+
+                        <!-- BUILDING B -->
+                        <polygon class="building" data-building="B"
+                            points="346,67 398,45 422,85 374,113"/>
+                        <text class="building-label" x="385" y="83">B</text>
+
+                        <!-- BUILDING C -->
+                        <polygon class="building" data-building="C"
+                            points="369,152 436,91 501,155 435,218"/>
+                        <text class="building-label" x="435" y="160">C</text>
+
+                        <!-- BUILDING D -->
+                        <polygon class="building" data-building="D"
+                            points="491,180 531,147 610,267 564,298"/>
+                        <text class="building-label" x="551" y="225">D</text>
+
+                        <!-- BUILDING E -->
+                        <polygon class="building" data-building="E"
+                            points="227,255 255,230 358,328 327,355"/>
+                        <text class="building-label" x="292" y="292">E</text>
+
+                        <!-- BUILDING F -->
+                        <polygon class="building" data-building="F"
+                            points="270,218 295,195 399,294 372,321"/>
+                        <text class="building-label" x="336" y="258">F</text>
+
+                        <!-- BUILDING G -->
+                        <polygon class="building" data-building="G"
+                            points="307,181 331,159 433,262 408,287"/>
+                        <text class="building-label" x="370" y="222">G</text>
+
+                        <!-- BUILDING H -->
+                        <polygon class="building" data-building="H"
+                            points="114,267 142,242 228,333 197,363"/>
+                        <text class="building-label" x="172" y="310">H</text>
+
+                        <!-- BUILDING I -->
+                        <polygon class="building" data-building="I"
+                            points="205,370 237,337 265,370 235,401"/>
+                        <text class="building-label" x="235" y="374">I</text>
+
+                        <!-- BUILDING J -->
+                        <polygon class="building" data-building="J"
+                            points="266,410 296,380 330,411 300,443"/>
+                        <text class="building-label" x="300" y="415">J</text>
+
+                        <!-- BUILDING K -->
+                        <polygon class="building" data-building="K"
+                            points="439,300 462,265 613,333 592,368"/>
+                        <text class="building-label" x="527" y="320">K</text>
+
+                        <!-- BUILDING L -->
+                        <polygon class="building" data-building="L"
+                            points="394,377 437,306 470,322 429,396"/>
+                        <text class="building-label" x="433" y="357">L</text>
+
+                        <!-- BUILDING M -->
+                        <polygon class="building" data-building="M"
+                            points="440,361 456,359 567,407 547,450"/>
+                        <text class="building-label" x="503" y="408">M</text>
+
+                        <!-- BUILDING O (N REMOVED) -->
+                        <polygon class="building" data-building="O"
+                            points="656,347 692,364 627,499 592,482"/>
+                        <text class="building-label" x="643" y="424">O</text>
+
+                        <!-- BUILDING P -->
+                        <polygon class="building" data-building="P"
+                            points="389,397 562,487 542,526 369,432"/>
+                        <text class="building-label" x="467" y="468">P</text>
+
+                        <!-- BUILDING Q -->
+                        <polygon class="building" data-building="Q"
+                            points="574,494 695,552 670,568 550,527"/>
+                        <text class="building-label" x="625" y="537">Q</text>
+
+                        <!-- BUILDING R -->
+                        <polygon class="building" data-building="R"
+                            points="729,384 765,402 694,540 661,522"/>
+                        <text class="building-label" x="711" y="466">R</text>
+                    </svg>
+                </div>
+
+                <div class="map-footer">
+                    <span>🖱️ Select an empty area to set your location.</span>
+                    <span>Click a building to navigate.</span>
+                </div>
+            </section>
+        </div>
+    </main>
+
+</body>
+</html>
