@@ -52,23 +52,35 @@ const buildings = {
     },
     C: {
         name: "Gymnasium",
-        description: "Area for sports, physical activities, and school events."
+        description: "Sports and school events."
     },
     D: {
         name: "Grade 7 Building",
-        description: "Classrooms for Grade 7 students."
+        description: "Classrooms for Grade 7 students.",
+        floors: {
+            "Floor 1": ["Dahlia"]
+        }
     },
     E: {
         name: "Grade 9 Building",
-        description: "Classrooms for Grade 9 students."
+        description: "Classrooms for Grade 9 students.",
+        floors: {
+            "Floor 3": ["Sagimsim"]
+        }
     },
     F: {
         name: "Grade 10 Building",
-        description: "Classrooms for Grade 10 students."
+        description: "Classrooms for Grade 10 students.",
+        floors: {
+            "Floor 4": ["Mabini"]
+        }
     },
     G: {
         name: "Grade 8 Building",
-        description: "Classrooms for Grade 8 students."
+        description: "Classrooms for Grade 8 students.",
+        floors: {
+            "Floor 2": ["Bluebird"]
+        }
     },
     H: {
         name: "Administration Building",
@@ -84,7 +96,7 @@ const buildings = {
     },
     K: {
         name: "Music, Arts and SSG Building",
-        description: "Area for music, arts, and student government activities."
+        description: "Music, arts, and student government."
     },
     L: {
         name: "Canteen",
@@ -92,26 +104,35 @@ const buildings = {
     },
     M: {
         name: "SMAW and Cookery Building",
-        description: "Technical-vocational learning area for SMAW and cookery."
+        description: "Technical-vocational learning area."
     },
     O: {
-        name: "Grade 12 / Grade 11 Building",
-        description: "Classrooms for senior high school students."
+        name: "Grade 11 Building",
+        description: "Classrooms for Grade 11 students.",
+        floors: {
+            "Floor 1": ["Sibulan", "Baracatan"],
+            "Floor 2": ["Sirawan", "Bangkas Heights"],
+            "Floor 3": ["Mulig", "Daliao"],
+            "Floor 4": ["Marapangi", "Lizada"]
+        }
     },
     P: {
-        name: "Grade 12 / Grade 11 Building",
-        description: "Classrooms for senior high school students."
+        name: "Grade 12 Building",
+        description: "Classrooms for Grade 12 students.",
+        floors: {
+            "Floor 3": ["Tagurano", "Tibuloy"],
+            "Floor 4": ["Tausug", "Yakan"]
+        }
     },
     Q: {
         name: "Grade 12 / Grade 11 Building",
-        description: "Classrooms for senior high school students."
+        description: "Senior high school area."
     },
     R: {
         name: "Grade 11 Building",
         description: "Classrooms for Grade 11 students."
     }
 };
-
 
 // 4. BUILDING CENTER COORDINATES
 
@@ -141,6 +162,9 @@ const buildingCenters = {
 let userLocation = null;
 let isSettingLocation = false;
 let selectedDestination = null;
+
+let selectedFloor = null;
+let selectedClassroom = null;
 
 
 // 6. PUT THE ROUTE LAYER ABOVE THE BUILDINGS
@@ -262,15 +286,17 @@ function selectDestination(buildingID) {
     }
 
     selectedDestination = buildingID;
+    selectedFloor = null;
+    selectedClassroom = null;
 
     destinationSelect.value = buildingID;
 
-    // Remove old building highlights.
+    // Remove old highlights.
     document.querySelectorAll(".building").forEach(function (polygon) {
         polygon.classList.remove("selected");
     });
 
-    // Highlight the selected building.
+    // Highlight selected building.
     const selectedPolygon = schoolMap.querySelector(
         '[data-building="' + buildingID + '"]'
     );
@@ -279,15 +305,48 @@ function selectDestination(buildingID) {
         selectedPolygon.classList.add("selected");
     }
 
+    const building = buildings[buildingID];
+
     // Display building information.
     buildingInfo.innerHTML = `
-        <h3>${buildingID} - ${buildings[buildingID].name}</h3>
-        <p>${buildings[buildingID].description}</p>
+        <h3>${buildingID} - ${building.name}</h3>
+        <p>${building.description}</p>
     `;
+
+    // Display available floors.
+    if (building.floors) {
+
+        buildingInfo.innerHTML += `
+            <h4>Select a Floor</h4>
+            <div id="floorOptions"></div>
+        `;
+
+        const floorOptions = buildingInfo.querySelector("#floorOptions");
+
+        Object.keys(building.floors).forEach(function (floor) {
+
+            const button = document.createElement("button");
+
+            button.textContent = floor;
+            button.setAttribute("data-floor", floor);
+
+            button.style.display = "block";
+            button.style.width = "100%";
+            button.style.padding = "12px";
+            button.style.marginBottom = "8px";
+            button.style.cursor = "pointer";
+            button.style.borderRadius = "8px";
+            button.style.border = "1px solid #cccccc";
+
+            floorOptions.appendChild(button);
+
+        });
+
+    }
 
     if (userLocation) {
         statusMessage.textContent =
-            "Destination selected: " + buildings[buildingID].name;
+            "Building selected! Choose a floor and classroom.";
     } else {
         statusMessage.textContent =
             "Building selected! Set your location to start navigation.";
@@ -296,6 +355,122 @@ function selectDestination(buildingID) {
     drawNavigation();
 }
 
+
+// 12.1 DISPLAY CLASSROOMS WHEN A FLOOR IS SELECTED
+
+function showFloorSections(buildingID, floor) {
+
+    const building = buildings[buildingID];
+
+    if (!building || !building.floors[floor]) {
+        return;
+    }
+
+    selectedFloor = floor;
+    selectedClassroom = null;
+
+    const sections = building.floors[floor];
+
+    buildingInfo.innerHTML = `
+        <h3>${building.name}</h3>
+
+        <h4>${floor}</h4>
+
+        <p>Select your classroom:</p>
+
+        <div id="sectionOptions"></div>
+
+        <button data-back-to-floors
+            style="margin-top:12px;padding:10px;cursor:pointer;">
+            ← Back to Floors
+        </button>
+    `;
+
+    const sectionOptions = buildingInfo.querySelector("#sectionOptions");
+
+    sections.forEach(function (section) {
+
+        const button = document.createElement("button");
+
+        button.textContent = section;
+        button.setAttribute("data-section", section);
+
+        button.style.display = "block";
+        button.style.width = "100%";
+        button.style.padding = "12px";
+        button.style.marginBottom = "8px";
+        button.style.cursor = "pointer";
+        button.style.borderRadius = "8px";
+        button.style.border = "1px solid #cccccc";
+
+        sectionOptions.appendChild(button);
+
+    });
+
+}
+
+
+// 12.2 HANDLE FLOOR AND CLASSROOM CLICKS
+
+buildingInfo.addEventListener("click", function (event) {
+
+    const floorButton = event.target.closest("[data-floor]");
+
+    if (floorButton) {
+
+        showFloorSections(
+            selectedDestination,
+            floorButton.getAttribute("data-floor")
+        );
+
+        return;
+    }
+
+    const sectionButton = event.target.closest("[data-section]");
+
+    if (sectionButton) {
+
+        selectedClassroom =
+            sectionButton.getAttribute("data-section");
+
+        const building = buildings[selectedDestination];
+
+        buildingInfo.innerHTML = `
+            <h3>${building.name}</h3>
+
+            <p><strong>Floor:</strong> ${selectedFloor}</p>
+
+            <p><strong>Classroom:</strong> ${selectedClassroom}</p>
+
+            <p>Your classroom has been selected!</p>
+
+            <button data-back-to-floors
+                style="padding:10px;cursor:pointer;">
+                ← Choose Another Classroom
+            </button>
+        `;
+
+        if (userLocation) {
+            statusMessage.textContent =
+                "Route to " + selectedClassroom +
+                " selected. Follow the route to " + building.name + ".";
+        } else {
+            statusMessage.textContent =
+                "Classroom selected! Set your starting location to navigate.";
+        }
+
+        drawNavigation();
+
+        return;
+    }
+
+    if (event.target.closest("[data-back-to-floors]")) {
+
+        selectDestination(selectedDestination);
+
+    }
+
+});
 
 // 13. DESTINATION DROPDOWN
 
@@ -450,6 +625,8 @@ clearButton.addEventListener("click", function () {
 
     userLocation = null;
     selectedDestination = null;
+    selectedFloor = null;
+    selectedClassroom = null;
     isSettingLocation = false;
 
     routeLayer.innerHTML = "";
